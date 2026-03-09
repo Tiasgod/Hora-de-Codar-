@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento</title>
+</head>
+<body>
+    <script>
+
+        // 1
+
+        var nome_carro = "Fusca";
+        alert(nome_carro);
+        
+        // 2
+        var nome = prompt("informe seu nome: ");
+        alert("Olá, " + nome);
+
+        // 3
+
+        var nome = prompt("informe seu nome: ");
+        var idade = prompt("informe sua idade: ");
+        alert("Olá, " + nome, "Sua idade é: " + idade);
+
+        // 4
+
+        let base = prompt("digite o número da base: ");
+        let altura = prompt("digite o número da altura: ");
+        let lado = prompt("digite o número do lado: ");
+        let diagonal_maior = prompt("digite o número da diagonal_maior: ");
+        let diagonal_menor = prompt("digite o número da diagonal_menor: ");
+        let base_maior = prompt("digite o número da base_maior: ");
+        let base_menor = prompt("digite o número da base_menor: ");
+        let pi = 3.14;
+        let raio = prompt("informe o valor do raio")
+
+
+        let retangulo = (base * altura);
+        let quadrado = (lado * lado);
+        let losangulo = ((diagonal_maior * diagonal_menor) / 2);
+        let trapezio = ((base_maior * base_menor)) * (altura) / 2;
+        let paralelogramo = (base * altura);
+        let triangulo = (base * altura) / 2;
+        let circulo = (pi * (raio * raio));
+
+        let figura = prompt("Qual figura você quer calcular? (retangulo, quadrado, losangulo, trapezio, paralelogramo, triangulo, circulo)");
+
+switch (figura) {
+
+    case "retangulo":
+        alert("Área do retângulo: " + retangulo);
+        break;
+
+    case "quadrado":
+        alert("Área do quadrado: " + quadrado);
+        break;
+
+    case "losangulo":
+        alert("Área do losango: " + losangulo);
+        break;
+
+    case "trapezio":
+        alert("Área do trapézio: " + trapezio);
+        break;
+
+    case "paralelogramo":
+        alert("Área do paralelogramo: " + paralelogramo);
+        break;
+
+    case "triangulo":
+        alert("Área do triângulo: " + triangulo);
+        break;
+
+    case "circulo":
+        alert("Área do círculo: " + circulo);
+        break;
+
+    default:
+        alert("Figura inválida!");
+        break;
+}
+
+   </script>
+    
+</body>
+</html>
