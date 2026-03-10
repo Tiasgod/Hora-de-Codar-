@@ -81,6 +81,101 @@ switch (figura) {
         break;
 }
 
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript simulator</title>
+</head>
+<body>
+    <h1>Código de Javascript 2</h1>
+    
+    <script>
+
+        // 1
+ 
+        let a = Number(prompt("Informe um número A: "));
+        let b = Number(prompt("Informe um número B: "));
+
+        if (a > b) {
+            alert("A é maior do que B");
+        } else if (b > a) {
+            alert("B é maior do que A");
+        } else {
+            alert("A e B são iguais");
+        }
+
+        // 2
+
+        let c = Number(prompt("Informe um número C: "));
+        if (c > 0) {
+            alert("Este número é positivo");
+        } else if (c < 0) {
+            alert("Este número é negativo");
+        } else {
+            alert("Este número é nulo(negativo)");
+        }
+
+        // 3 
+
+        let d = Number(prompt("Informe um número: "));
+        let e = Number(prompt("Informe um número diferente do anterior: "));
+        let f = Number(prompt("Informe um número diferente dos anteriores: "));
+
+        let numeros = [d,e,f];
+        let maior = Math.max(...numeros);
+
+        alert("O maior número exibido entre os 3 é: "+maior);  
+
+        // 4
+
+        let g = Number(prompt("Informe um número: "));
+        let h = Number(prompt("Informe um número diferente do anterior: "));
+        let i = Number(prompt("Informe um número diferente dos anteriores: "));
+        let num = [g, h, i];
+        num.sort((a, b) => a - b);
+        let segundo = num[1];
+        let ainda_maior = num[2];
+        let soma = maior + segundo;
+        alert("A soma dos dois maiores números dessa lista é: " + soma); 
+
+        // 5
+
+        let j = Number(prompt("Informe um número: "));
+        let k = Number(prompt("Informe um número: "));
+        let l = Number(prompt("Informe um número: "));
+        let m = Number(prompt("Informe um número: "));
+        let n = Number(prompt("Informe um número: "));
+        let o = Number(prompt("Informe um número: "));
+
+        let armazenar = [j,k,l,m,n,o];
+        let somar = armazenar.reduce((acc, curr) => acc + curr, 0);
+        alert("A soma de todos os valores informados é: "+somar);
+ 
+        // 6 
+
+        
+        let x = Number(prompt("Informe um número: "));
+        let y = Number(prompt("Informe um número diferente do anterior: "));
+        let w = Number(prompt("Informe um número diferente dos anteriores: "));
+        let z = Number(prompt("Informe um número diferente dos anteriores: "));
+
+        let muitos_numeros = [x,y,w,z];
+        let O_maior = Math.max(...muitos_numeros);
+        let primeiro = muitos_numeros[0];
+        let ultimo = muitos_numeros[3];
+
+        alert("O primeiro número é: "+primeiro, "O último é: "+ultimo, "O maoior deles é: "+O_maior);
+        alert("O último é: "+ultimo);
+        alert("O maior deles é: "+O_maior);
+        
+    
+    </script>
+    
+</body>
+</html>
+
    </script>
     
 </body>
