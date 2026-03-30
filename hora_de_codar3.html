@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bora codar - parte 3</title>
+</head>
+<body>
+      <p id="contador">30</p>
+  <script>
+
+    1
+
+    let contador = 30;
+
+    const intervalo = setInterval(() => {
+      contador--;
+      document.getElementById('contador').textContent = contador;
+
+      if (contador === 0) {
+        clearInterval(intervalo);
+        document.getElementById('contador').textContent = 'EXPLOSÃO!';
+      }
+    }, 1000);
+
+    2
+
+    let primeiro_numero = Number(prompt("Digite o 1 valor: "));
+    let segundo_numero = Number(prompt("Digite o 2 valor: "));
+    while (segundo_numero <= 0) {
+        segundo_numero = Number(prompt("Número não aceito por ser muito baixo. digite outro: "))
+       
+    }
+    let resultado = primeiro_numero / segundo_numero;
+    alert("A divisão desses 2 números é: "+resultado);
+
+    3
+
+    for (i = 10; i >=1; i--){
+        console.log(i);
+    }
+
+    // 4
+
+    lista = []
+
+    for (i = 15; i<=100; i++ ){
+        lista.push(i);
+    }
+
+    soma = lista.reduce((acc, curr) => acc + curr, 0);
+    media = soma / 85
+
+    alert("A média aritimética dos números entre 15 e 100, incluindo eles, é: "+media);
+
+    // 5
+
+    listinha = []
+    let a = Number(prompt("Digite o primeiro número: "));
+    let b = Number(prompt("Digite o segundo número: "));
+    for (i = a; i<=b; i++){
+        listinha.push(i);
+    }
+    media1 = (a + b) / 2
+    soma_inteiros = listinha.reduce((acc, curr) => acc + curr, 0);
+    quantidade =  b - a + 1;
+    media2 = soma_inteiros / quantidade;
+
+    alert("A média de A + B é: "+media1);
+    alert("A média dos inteiros entre A + B é: "+media2);
+
+    // 6
+
+    let aprovados = 0;
+    let resposta = "S";
+    while (resposta === "S") {
+        let n1 = Number(prompt("Digite a primeira nota: "));
+        let n2 = Number(prompt("Digite a segunda nota: "));
+
+        let media = (n1 + n2) / 2;
+        alert("Média: " + media);
+
+        if (media >= 9.5) {
+            aprovados++;
+        }
+
+        resposta = prompt("Calcular a média de outro aluno? (S/N)");
+    }
+
+    alert("Quantidade de aprovados: " + aprovados);
+    
+    // 7
+
+    let soma = 0;
+    for (let i = 1; i <= 6; i++) {
+        let nota = Number(prompt("Digite a nota " + i + ":"));
+
+        while (nota < 0 || nota > 10) {
+            nota = Number(prompt("Valor inválido! Digite novamente:"));
+        }
+
+        soma += nota;
+    }
+    let media = soma / 6;
+    alert("Média: " + media);
+
+    // 8
+
+    let N = Number(prompt("Digite um número maior que 0:"));
+    for (let i = 1; i <= N; i++) {
+        console.log(i);
+    }
+
+    // 9
+
+    for (let i = 101; i <= 110; i++) {
+    console.log(i);
+
+    }
+
+    // 10
+
+    let dentro = 0;
+    let fora = 0;
+    for (let i = 1; i <= 10; i++) {
+        let valor = Number(prompt("Digite um valor:"));
+
+        if (valor >= 24 && valor <= 42) {
+            dentro++;
+        } else {
+            fora++;
+        }
+    }
+
+    alert("Dentro: " + dentro);
+    alert("Fora: " + fora);
+
+    // 11
+
+    let N = Number(prompt("Digite um número:"));
+    for (let i = 1; i <= N; i++) {
+        console.log("Tabuada do " + i);
+
+        for (let j = 1; j <= 10; j++) {
+            console.log(i + " x " + j + " = " + (i * j));
+        }
+    }
+
+
+  </script>
+
+
+    
+</body>
+</html>

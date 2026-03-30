@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hora de Codar 4 - Uma nova esperança</title>
+</head>
+<body>
+    <h1>Hora de Codar 4 - Uma nova esperança</h1>
+    <script>
+
+    // 1
+
+    let estudantes = [];
+    while (true) {
+        let nome = prompt("Digite o nome do estudante (ou PARE para encerrar):");
+
+        if (nome === "PARE") {
+            break;
+        }
+
+        estudantes.push(nome);
+    }
+
+    alert("Quantidade de estudantes: " + estudantes.length);
+
+    for (let i = 0; i < estudantes.length; i++) {
+        console.log(estudantes[i]);
+    }
+
+    // 2
+
+    let planetas = ["Terra", "Marte", "Plutão", "Vênus", "Júpiter", "Saturno"];
+    let nome = prompt("Digite o nome de um planeta:");
+
+    if (planetas.includes(nome)) {
+        alert("O planeta está na lista!");
+    } else {
+        alert("O planeta NÃO está na lista!");
+    }
+    
+    // 3
+
+    let frutas = ["Maçã", "Banana", "Laranja", "Uva", "Pera"];
+    while (frutas.length > 0) {
+        alert("Frutas disponíveis: " + frutas);
+
+        let nome = prompt("Digite o nome de uma fruta para remover:");
+
+        if (frutas.includes(nome)) {
+            let index = frutas.indexOf(nome);
+            frutas.splice(index, 1);
+            alert("Fruta foi retirada da lista");
+        } else {
+            alert("Fruta indisponível no nosso mercado");
+        }
+    }
+    alert("Lista de compras finalizada");
+
+    
+    </script>
+
+    
+</body>
+</html>
