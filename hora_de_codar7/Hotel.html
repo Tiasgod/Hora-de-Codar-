@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotel Terabithia</title>
+</head>
+<body>
+  <h1>Hora de Codar 7 - O retorno do Coder</h1>
+<script>
+
+
+const NOME_HOTEL = "Hotel do TiTi";
+const SENHA = "2678";
+
+let nomeUsuario = "";
+let quartos = new Array(21).fill(false); // índice 1-20
+let reservas = [];    // {nome, quarto, tipo, diarias, total}
+let hospedes = [];    // {nome, datahora}
+let totalEventos = 0;
+let receitaHospedagem = 0;
+let receitaEventos = 0;
+
+
+
+function pedir(msg) {
+  let r = prompt(msg);
+  if (r === null) r = "";
+  return r.trim();
+}
+
+function confirmar(msg) {
+  return pedir(msg + " (S/N)").toUpperCase() === "S";
+}
+
+function lerInt(msg) {
+  return parseInt(pedir(msg));
+}
+
+function lerFloat(msg) {
+  return parseFloat(pedir(msg).replace(",", "."));
+}
+
+function formatarReais(v) {
+  return "R$ " + v.toFixed(2).replace(".", ",");
+}
+
+// Autenticação
+
+function autenticar() {
+  alert("=============================\n  Bem-vindo ao Hotel " + NOME_HOTEL + "\n=============================");
+  nomeUsuario = pedir("Nome do usuário:");
+
+  for (let tentativas = 1; tentativas <= 3; tentativas++) {
+    let senha = pedir("Senha:");
+    if (senha === SENHA) {
+      alert("Bem-vindo ao Hotel " + NOME_HOTEL + ", " + nomeUsuario + ". É um imenso prazer ter você por aqui!");
+      return true;
+    }
+    alert("Senha incorreta. Tentativa " + tentativas + "/3.");
+  }
+  alert("Sistema bloqueado por excesso de tentativas. Até logo!");
+  return false;
+}
+
+// Menu Principal
+
+function menu() {
+  while (true) {
+    let opcao = pedir(
+      "Menu Principal\n" +
+      "1. Reservas de Quartos\n" +
+      "2. Cadastro de Hóspedes\n" +
+      "3. Eventos\n" +
+      "4. Ar-Condicionado\n" +
+      "5. Abastecimento\n" +
+      "6. Relatórios Operacionais\n" +
+      "7. Sair\n\nOpção:"
+    );
+
+    if (opcao === "1") reservaQuartos();
+    else if (opcao === "2") menuHospedes();
+    else if (opcao === "3") eventos();
+    else if (opcao === "4") arCondicionado();
+    else if (opcao === "5") abastecimento();
+    else if (opcao === "6") relatorios();
+    else if (opcao === "7") {
+      alert("Muito obrigado e até logo, " + nomeUsuario + ".");
+      return;
+    } else {
+      alert("Opção inválida. Informe um número entre 1 e 7.");
+    }
+  }
+}
+
+// Subprograma 1
+
+function reservaQuartos() {
+  alert("[Reservas de Quartos]");
+
+  let diaria = lerFloat("Informe o valor da diária: R$");
+  let dias = lerInt("Informe a quantidade de diárias (1-30):");
+
+  if (isNaN(diaria) || isNaN(dias) || diaria <= 0 || dias < 1 || dias > 30) {
+    alert("Valor inválido, " + nomeUsuario + ".");
+    return;
+  }
+
+  let nomeHospede = pedir("Informe o nome do hóspede:");
+
+  let tipoInput = pedir("Tipo de quarto (S=Standard / E=Executivo / L=Luxo):").toUpperCase();
+  let fator, tipoNome;
+  if (tipoInput === "E") { fator = 1.35; tipoNome = "Executivo"; }
+  else if (tipoInput === "L") { fator = 1.65; tipoNome = "Luxo"; }
+  else { fator = 1.00; tipoNome = "Standard"; }
+
+  let numQuarto = escolherQuarto();
+  if (numQuarto === -1) return;
+
+  let subtotal = diaria * dias * fator;
+  let taxa = subtotal * 0.10;
+  let total = subtotal + taxa;
+
+  let resumo =
+    "--- Resumo ---\n" +
+    "Hóspede : " + nomeHospede + "\n" +
+    "Quarto  : " + numQuarto + " (" + tipoNome + ")\n" +
+    "Subtotal: " + formatarReais(subtotal) + "\n" +
+    "Taxa 10%: " + formatarReais(taxa) + "\n" +
+    "Total   : " + formatarReais(total);
+
+  alert(resumo);
+
+  if (confirmar(nomeUsuario + ", confirma a reserva?")) {
+    quartos[numQuarto] = true;
+    reservas.push({ nome: nomeHospede, quarto: numQuarto, tipo: tipoNome, diarias: dias, total });
+    receitaHospedagem += total;
+    alert("Reserva efetuada com sucesso.\n\n" + mapaQuartos());
+  } else {
+    alert("Reserva não efetuada.");
+  }
+}
+
+function escolherQuarto() {
+  while (true) {
+    let q = lerInt("Escolha um quarto (1-20):");
+    if (isNaN(q) || q < 1 || q > 20) { alert("Quarto deve ser entre 1 e 20."); continue; }
+
+    if (!quartos[q]) return q;
+
+    let livres = [];
+    for (let i = 1; i <= 20; i++) if (!quartos[i]) livres.push(i);
+    alert("Quarto " + q + " já está ocupado.\nQuartos livres: " + livres.join(", "));
+
+    if (!confirmar("Deseja escolher outro quarto?")) return -1;
+  }
+}
+
+function mapaQuartos() {
+  let mapa = "Mapa de quartos:\n";
+  for (let i = 1; i <= 20; i++) {
+    mapa += "[" + (quartos[i] ? "O" : "L") + "] ";
+    if (i % 4 === 0) mapa += "\n";
+  }
+  return mapa;
+}
+
+// Subprograma 2
+
+function menuHospedes() {
+  while (true) {
+    let op = pedir(
+      "[Cadastro de Hóspedes]\n" +
+      "1-Cadastrar  2-Pesquisar exato  3-Pesquisar prefixo\n" +
+      "4-Listar  5-Atualizar  6-Remover  7-Voltar\nOpção:"
+    );
+
+    if (op === "1") cadastrarHospede();
+    else if (op === "2") pesquisarExato();
+    else if (op === "3") pesquisarPrefixo();
+    else if (op === "4") listarHospedes();
+    else if (op === "5") atualizarHospede();
+    else if (op === "6") removerHospede();
+    else if (op === "7") return;
+    else alert("Opção inválida.");
+  }
+}
+
+function cadastrarHospede() {
+  if (hospedes.length >= 15) { alert("Máximo de cadastros atingido."); return; }
+  let nome = pedir("Nome do hóspede:");
+  if (hospedes.some(h => h.nome.toLowerCase() === nome.toLowerCase())) { alert("Hóspede já cadastrado."); return; }
+  let agora = new Date().toLocaleString("pt-BR");
+  hospedes.push({ nome, datahora: agora });
+  alert("Hóspede cadastrado com sucesso.");
+}
+
+function pesquisarExato() {
+  let nome = pedir("Nome:");
+  let encontrado = hospedes.find(h => h.nome.toLowerCase() === nome.toLowerCase());
+  if (encontrado) alert("Hóspede " + encontrado.nome + " foi encontrado.");
+  else alert("Hóspede não encontrado.");
+}
+
+function pesquisarPrefixo() {
+  let prefixo = pedir("Prefixo:").toLowerCase();
+  let resultados = hospedes.filter(h => h.nome.toLowerCase().startsWith(prefixo));
+  if (resultados.length === 0) { alert("Nenhum hóspede encontrado."); return; }
+  alert("Resultados:\n" + resultados.map((h, i) => "[" + (i + 1) + "] " + h.nome).join("\n"));
+}
+
+function listarHospedes() {
+  if (hospedes.length === 0) { alert("Nenhum hóspede cadastrado."); return; }
+  let ordenados = [...hospedes].sort((a, b) => a.nome.localeCompare(b.nome));
+  alert("Lista de hóspedes:\n" + ordenados.map((h, i) => "[" + (i + 1) + "] " + h.nome + " — " + h.datahora).join("\n"));
+}
+
+function atualizarHospede() {
+  if (hospedes.length === 0) { alert("Nenhum hóspede cadastrado."); return; }
+  listarHospedes();
+  let idx = lerInt("Índice para atualizar:") - 1;
+  if (isNaN(idx) || idx < 0 || idx >= hospedes.length) { alert("Índice inválido."); return; }
+  let novoNome = pedir("Novo nome:");
+  hospedes[idx].nome = novoNome;
+  alert("Operação realizada com sucesso.");
+}
+
+function removerHospede() {
+  if (hospedes.length === 0) { alert("Nenhum hóspede cadastrado."); return; }
+  listarHospedes();
+  let idx = lerInt("Índice para remover:") - 1;
+  if (isNaN(idx) || idx < 0 || idx >= hospedes.length) { alert("Índice inválido."); return; }
+  hospedes.splice(idx, 1);
+  alert("Operação realizada com sucesso.");
+}
+
+// Subprograma 3
+
+function eventos() {
+  alert("[Eventos]");
+
+  // Parte A: Auditório
+  let convidados = lerInt("Número de convidados:");
+  if (isNaN(convidados) || convidados < 0 || convidados > 350) {
+    alert("Número de convidados inválido."); return;
+  }
+
+  let auditorio, cadeirasExtras = 0;
+  if (convidados <= 220) {
+    auditorio = "Laranja";
+    if (convidados > 150) cadeirasExtras = convidados - 150;
+    alert("Auditório selecionado: Laranja" + (cadeirasExtras > 0 ? " (" + cadeirasExtras + " cadeiras adicionais)" : ""));
+  } else {
+    auditorio = "Colorado";
+    alert("Auditório selecionado: Colorado");
+  }
+
+  // Parte B: Agenda
+  let dia = pedir("Dia da semana (ex: segunda, sabado):").toLowerCase();
+  let horaInicio = lerInt("Hora inicial (7-23):");
+  let duracao = lerInt("Duração em horas (1-12):");
+
+  if (isNaN(horaInicio) || isNaN(duracao) || duracao < 1 || duracao > 12) {
+    alert("Dados inválidos."); return;
+  }
+
+  let horaFim = horaInicio + duracao;
+  let fimDeSemana = dia === "sabado" || dia === "domingo";
+  let limiteHora = fimDeSemana ? 15 : 23;
+
+  if (horaInicio < 7 || horaFim > limiteHora) {
+    alert("Auditório indisponível nesse horário."); return;
+  }
+
+  let empresa = pedir("Nome da empresa:");
+  alert("Auditório reservado para " + empresa + ": " + dia + " às " + horaInicio + "h até " + horaFim + "h.");
+
+  // Parte C: Garçons
+  let garconsBase = Math.ceil(convidados / 12);
+  let garconsDuracao = Math.floor(duracao / 2);
+  let totalGarcons = garconsBase + garconsDuracao;
+  let custoGarcons = totalGarcons * duracao * 10.50;
+
+  // Parte D: Buffet
+  let cafe = convidados * 0.2;
+  let agua = convidados * 0.5;
+  let salgados = convidados * 7;
+  let custoBuffet = (cafe * 0.80) + (agua * 0.40) + ((salgados / 100) * 34.00);
+
+  let totalEvento = custoGarcons + custoBuffet;
+
+  // Parte E: Relatório
+  let relatorio =
+    "=== Relatório do Evento ===\n" +
+    "Empresa    : " + empresa + "\n" +
+    "Auditório  : " + auditorio + "\n" +
+    "Dia/Hora   : " + dia + " " + horaInicio + "h–" + horaFim + "h\n" +
+    "Convidados : " + convidados + "\n" +
+    "Duração    : " + duracao + "h\n" +
+    "Garçons    : " + totalGarcons + "\n" +
+    "Custo garçons: " + formatarReais(custoGarcons) + "\n" +
+    "\nBuffet:\n" +
+    "Café      : " + cafe.toFixed(1) + " L\n" +
+    "Água      : " + agua.toFixed(1) + " L\n" +
+    "Salgados  : " + salgados + " un\n" +
+    "Custo buffet: " + formatarReais(custoBuffet) + "\n" +
+    "\nTotal do evento: " + formatarReais(totalEvento);
+
+  alert(relatorio);
+
+  if (confirmar("Confirmar reserva?")) {
+    totalEventos++;
+    receitaEventos += totalEvento;
+    alert("Reserva efetuada com sucesso.");
+  } else {
+    alert("Reserva não efetuada.");
+  }
+}
+
+// Subprograma 4
+
+function arCondicionado() {
+  alert("[Ar-Condicionado]");
+  let orcamentos = [];
+
+  do {
+    let empresa = pedir("Empresa:");
+    let valorAparelho = lerFloat("Valor por aparelho: R$");
+    let qtd = lerInt("Quantidade de aparelhos:");
+    let descPerc = lerFloat("Desconto (%):");
+    let minimo = lerInt("Mínimo de aparelhos para desconto:");
+    let deslocamento = lerFloat("Valor de deslocamento: R$");
+
+    let bruto = valorAparelho * qtd;
+    let valorDesconto = (qtd >= minimo) ? bruto * (descPerc / 100) : 0;
+    let total = bruto - valorDesconto + deslocamento;
+
+    alert("O serviço de " + empresa + " custará " + formatarReais(total));
+    orcamentos.push({ empresa, total });
+
+  } while (confirmar("Deseja informar novos dados, " + nomeUsuario + "?"));
+
+  if (orcamentos.length < 2) { alert("Informe pelo menos 2 empresas para comparação."); return; }
+
+  let melhor = orcamentos.reduce((a, b) => a.total < b.total ? a : b);
+  let pior   = orcamentos.reduce((a, b) => a.total > b.total ? a : b);
+  let difPerc = ((pior.total - melhor.total) / melhor.total * 100).toFixed(1);
+
+  alert(
+    "Melhor orçamento: " + melhor.empresa + " — " + formatarReais(melhor.total) + "\n" +
+    "Pior  orçamento : " + pior.empresa   + " — " + formatarReais(pior.total) + "\n" +
+    "Diferença: " + difPerc + "%"
+  );
+}
+
+// Subprograma 5
+
+function abastecimento() {
+  alert("[Abastecimento]");
+  let tanque = 42;
+
+  let wAlcool   = lerFloat("Wayne Oil → Álcool: R$");
+  let wGasolina = lerFloat("Wayne Oil → Gasolina: R$");
+  let sAlcool   = lerFloat("Stark Petrol → Álcool: R$");
+  let sGasolina = lerFloat("Stark Petrol → Gasolina: R$");
+
+  let wCombustivel = wAlcool <= 0.70 * wGasolina ? "Álcool" : "Gasolina";
+  let wTotal = (wCombustivel === "Álcool" ? wAlcool : wGasolina) * tanque;
+
+  let sCombustivel = sAlcool <= 0.70 * sGasolina ? "Álcool" : "Gasolina";
+  let sTotal = (sCombustivel === "Álcool" ? sAlcool : sGasolina) * tanque;
+
+  let resultado =
+    "Wayne Oil  : melhor opção = " + wCombustivel + " | Total (42L) = " + formatarReais(wTotal) + "\n" +
+    "Stark Petrol: melhor opção = " + sCombustivel + " | Total (42L) = " + formatarReais(sTotal) + "\n\n";
+
+  if (wTotal <= sTotal) {
+    resultado += nomeUsuario + ", é mais barato abastecer com " + wCombustivel + " no posto Wayne Oil.";
+  } else {
+    resultado += nomeUsuario + ", é mais barato abastecer com " + sCombustivel + " no posto Stark Petrol.";
+  }
+
+  alert(resultado);
+}
+
+// Subprograma 6
+
+function relatorios() {
+  let ocupados = quartos.slice(1).filter(Boolean).length;
+  let taxaOcupacao = ((ocupados / 20) * 100).toFixed(0);
+  let totalReceita = receitaHospedagem + receitaEventos;
+
+  alert(
+    "===== Relatórios Operacionais =====\n" +
+    "Reservas confirmadas  : " + reservas.length + "\n" +
+    "Taxa de ocupação      : " + ocupados + "/20 (" + taxaOcupacao + "%)\n" +
+    "Hóspedes cadastrados  : " + hospedes.length + "\n" +
+    "Eventos confirmados   : " + totalEventos + "\n" +
+    "-----------------------------------\n" +
+    "Receita hospedagem    : " + formatarReais(receitaHospedagem) + "\n" +
+    "Receita eventos       : " + formatarReais(receitaEventos) + "\n" +
+    "Total geral           : " + formatarReais(totalReceita) + "\n" +
+    "==================================="
+  );
+}
+
+// Iniciar
+
+if (autenticar()) {
+  menu();
+}
+
+</script>
+</body>
+</html>
